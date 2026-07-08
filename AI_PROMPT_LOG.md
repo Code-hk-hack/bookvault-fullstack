@@ -49,3 +49,33 @@ This log documents the AI collaboration process, prompt strategies, outputs rece
   Formatted Markdown template covering project overview, target audience, folder structure, and development phases.
 * **Refinement Made:**  
   Pushed updated `README.md` to GitHub main branch to showcase structured planning.
+  ---
+### Entry 5: Initialize Mock Book Database
+* **Prompt Written:**  
+  *"Create a file named `src/data/books.js` containing an array of 8 dark fantasy book objects... [Full details from your prompt]"*
+* **Purpose:**  
+  To create a local data source for the BookVault library grid.
+* **Output Received:**  
+  A structured JavaScript array with 8 objects, each containing fantasy lore, genres, and Unsplash image links.
+* **Changes Made After Review:**  
+  Created `src/data/books.js`, exported the data, and verified the structure is ready for the `BookGrid` component.
+  ---
+### Entry 6: Interactive Book Grid & Genre Filtering
+* **Prompt Written:**  
+  *"Create a React component `src/components/BookGrid.js` using Tailwind CSS and Lucide React. Import book data, include a top filter bar with category pills, and render responsive cards showing cover image, title, author, rating, and sub-genre tag. Style with dark glassmorphism and red glowing borders on hover."*
+* **Purpose:**  
+  To build the core library interface where users can browse and filter the mock database.
+* **Output Received:**  
+  A functional React component using `useState` to filter the mapped array of books based on genre selection.
+* **Changes Made After Review:**  
+  Integrated `<BookGrid />` into `App.js` directly below the Hero section and adjusted z-index for layering.
+  ---
+### Entry 7: Lore Reader Modal
+* **Prompt Written:**  
+  *"Create a React component `src/components/LoreModal.js` using Framer Motion for entrance animations. It must accept a `book` prop and an `onClose` callback, displaying the full book details over a blurred backdrop."*
+* **Purpose:**  
+  To allow users to read the detailed lore of a specific book without leaving the library page.
+* **Output Received:**  
+  A modal component utilizing Framer Motion's `AnimatePresence` for smooth mounting/unmounting.
+* **Changes Made After Review:**  
+  Updated `BookGrid.js` to manage `selectedBook` state and render the `<LoreModal>` conditionally upon clicking the 'Read Lore' button.
