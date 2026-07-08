@@ -1,47 +1,56 @@
-# BookVault 📚
+# 📚 BookVault — Sanctuary for Forgotten Tales
 
-## Project Description
-BookVault is a modern, full-stack e-commerce web application engineered to bridge the gap between physical literature and seamless digital consumer access[cite: 3]. It provides a secure, centralized platform for discovering, managing, and purchasing books online[cite: 3].
+> A dark fantasy digital sanctuary cataloguing over 12,000 forbidden tomes, arcane lore, and untold epics.
 
-## Problem Statement
-Many independent bookstores rely exclusively on physical locations, which severely limits their customer reach[cite: 3, 5]. Furthermore, existing small-scale digital platforms often suffer from poor user interfaces, friction-heavy checkout processes, and a lack of secure authentication, which directly contributes to high cart abandonment and lost revenue[cite: 3, 5].
+## 🌌 Project Overview
+**BookVault** is an interactive web platform designed for fantasy enthusiasts, readers, and lore archivists. It provides an immersive, atmospheric interface to explore, search, and manage a vast catalog of dark fantasy literature.
 
-## Target Users
-*   **Customer:** General book-buying consumers looking to seamlessly search catalogs, manage a shopping cart, and securely complete purchases online[cite: 5].
-*   **Admin:** Bookstore operational staff and owners who require a secure dashboard to manage book inventory (CRUD operations) and fulfill customer orders efficiently[cite: 5].
+---
 
-## Features (Current & Planned)
-**Current Features (MVP)**
-*   Secure User Authentication via JWT[cite: 5].
-*   Dynamic Book Catalog with real-time search and genre filtering[cite: 5].
-*   Persistent Shopping Cart (add, remove, update quantities)[cite: 5].
-*   Secure Checkout Flow integrated with Stripe/Razorpay[cite: 5].
-*   Protected Admin Dashboard for full inventory and order management[cite: 5].
+## 🎯 Problem Statement
+Standard book platforms (like Goodreads) use bright, commercial layouts that ruin the thematic immersion for dark fantasy, sci-fi, and tabletop roleplaying game (TTRPG) communities. BookVault solves this by offering an immersive, gaming-grade UI featuring reactive animations, atmospheric soundscapes, and structured lore exploration.
 
-**Planned Features (Future Enhancements)**
-*   Customer review and 5-star rating system[cite: 5].
-*   User Wishlist / "Save for Later" functionality[cite: 5].
-*   Automated transactional email notifications (order receipts)[cite: 5].
-*   Advanced Admin Analytics Dashboard for tracking revenue and stock trends[cite: 5].
+## 👥 Target Users
+* **Dark Fantasy & Sci-Fi Readers** looking for curated sub-genres.
+* **TTRPG Players & Game Masters** seeking worldbuilding lore and inspiration.
+* **Collectors of Limited-Edition & Arcane Books.**
 
-## Technology Stack
-*   **Frontend:** React.js, Tailwind CSS[cite: 4].
-*   **Backend:** Node.js, Express.js[cite: 4].
-*   **Database:** MongoDB Atlas managed via Mongoose ODM[cite: 4].
-*   **Authentication:** JSON Web Tokens (JWT) & bcryptjs[cite: 4].
-*   **Payment Gateway:** Stripe / Razorpay Node.js SDK[cite: 4].
+---
 
-## Folder Structure
+## 🛠️ Technology Stack
+* **Frontend:** React.js, Tailwind CSS
+* **Animations:** Framer Motion
+* **Icons:** Lucide React
+* **Version Control:** Git & GitHub
+
+---
+
+## 🗺️ Development Roadmap & Tasks
+
+### Phase 1: Foundation & Hero Interface (Completed ✅)
+- [x] React & Tailwind CSS Setup
+- [x] Atmospheric Hero Section with Layered Anime Aesthetics
+- [x] Interactive Framer Motion Animated Navbar
+- [x] Responsive Layout & Radial Gradient Effects
+
+### Phase 2: Core Library Features (In Progress ⏳)
+- [ ] Interactive Book Grid & Filtering System
+- [ ] Lore Reader Modal Component
+- [ ] User Vault / Saved Bookshelf State
+
+### Phase 3: Authentication & Backend (Planned 🔮)
+- [ ] User Authentication (JWT)
+- [ ] Community Book Ratings & Reviews
+- [ ] Personal Arcane Reading Stats Dashboard
+
+---
+
+## 📁 Folder Structure
 ```text
-bookvault-fullstack/
-├── client/              # React.js Front-End SPA
-│   ├── src/
-│   │   ├── components/  # Reusable UI elements (Navbar, Hero)
-│   │   └── pages/       # Page layouts (Home, Cart, Checkout)
-├── server/              # Node.js & Express Backend API
-│   ├── config/          # Environment and database configurations
-│   ├── controllers/     # API route logic
-│   ├── middleware/      # JWT authentication and error handling
-│   ├── models/          # Mongoose schemas (Users, Books, Orders)
-│   └── routes/          # API endpoint definitions
-└── README.md
+client/
+├── public/
+└── src/
+    ├── assets/          # Custom anime character renders & logo
+    ├── components/      # Reusable React UI components (Hero, Navbar)
+    ├── App.js           # Main Application Layout
+    └── index.css        # Global Tailwind & Custom Glow Utility Styles
