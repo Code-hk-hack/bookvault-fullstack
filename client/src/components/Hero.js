@@ -22,6 +22,24 @@ const fadeUp = {
 };
 
 export function Hero() {
+  // Scroll function for the library section
+  const scrollToLibrary = (e) => {
+    e.preventDefault();
+    const librarySection = document.getElementById('library');
+    if (librarySection) {
+      librarySection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // NEW: Scroll function for the Lore section
+  const scrollToLore = (e) => {
+    e.preventDefault();
+    const loreSection = document.getElementById('lore');
+    if (loreSection) {
+      loreSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden bg-black">
       
@@ -115,8 +133,10 @@ export function Hero() {
           variants={fadeUp}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
+          {/* Attached scroll function to the Browse Books button */}
           <motion.a
             href="#library"
+            onClick={scrollToLibrary}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             className="group inline-flex items-center gap-2 rounded-xl bg-red-600 px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-red-700 shadow-[0_0_20px_rgba(220,38,38,0.4)]"
@@ -125,9 +145,11 @@ export function Hero() {
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </motion.a>
 
+          {/* UPDATED: Attached new scroll function and updated href to #lore */}
           <a
             href="#lore"
-            className="inline-flex items-center gap-2 rounded-xl border border-gray-500 px-8 py-4 text-base font-semibold text-gray-200 transition-colors hover:border-red-500 hover:text-red-400"
+            onClick={scrollToLore}
+            className="inline-flex items-center gap-2 rounded-xl border border-gray-500 px-8 py-4 text-base font-semibold text-gray-200 transition-colors hover:border-red-500 hover:text-red-400 cursor-pointer"
           >
             Read the Lore
           </a>

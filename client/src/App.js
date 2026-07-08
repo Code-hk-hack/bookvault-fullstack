@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { BookGrid } from './components/BookGrid';
+import { WorldLore } from './components/WorldLore';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Navbar />
       <Hero />
       <BookGrid />
+      <WorldLore /> {/* <-- New component added here */}
     </div>
   );
 }
