@@ -99,3 +99,13 @@ This log documents the AI collaboration process, prompt strategies, outputs rece
   A responsive grid layout detailing membership perks with hover animations and ambient background lighting.
 * **Changes Made After Review:**  
   Imported and rendered `<Membership />` at the bottom of `App.js`.
+  ---
+### Entry 10: Collections System & Vault Panel
+* **Prompt Written:**  
+  *"Create a sliding side-panel component `VaultPanel.js` using Framer Motion to display saved books. Update `App.js` to manage the state of saved tomes, and pass this state down to the Navbar and BookGrid so the bookmark buttons are functional."*
+* **Purpose:**  
+  To allow users to save their favorite books to a personal collection and view them in a seamlessly integrated UI drawer.
+* **Output Received:**  
+  A functional state management system and an animated sidebar that renders the saved items with remove functionality.
+* **Changes Made After Review:**  
+  Updated `Navbar.js` to be 100% transparent, removing the backdrop blur for better visual blending with the hero background. Refined the custom logo implementation using `mix-blend-lighten` to remove hard square edges and added a cinematic presentation modal triggered `onClick`.

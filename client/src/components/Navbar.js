@@ -1,59 +1,116 @@
-import { motion } from "framer-motion";
-// Import your logo image from assets
-import logoImg from '../assets/logo.png';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
-export function Navbar() {
+import vaultLogo from '../assets/logo.png'; 
+
+export function Navbar({ onOpenVault, savedCount }) {
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+
   return (
-    <motion.nav 
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
-    >
-      <div className="mx-auto flex max-w-6xl items-center justify-between rounded-2xl border border-white/10 bg-black/40 px-6 py-3 backdrop-blur-md shadow-[0_0_15px_rgba(220,38,38,0.2)]">
-        
-        {/* Logo Section - Hover Interactive */}
-        <div className="flex items-center gap-3 cursor-pointer group">
-          <motion.img 
-            src={logoImg} 
-            alt="BookVault Logo" 
-            className="h-9 w-9 object-contain rounded-lg drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]"
-            // Hover animation effects
-            whileHover={{ 
-              scale: 1.15,
-              rotate: 8,
-              filter: "drop-shadow(0px 0px 15px rgba(239, 68, 68, 0.9))"
-            }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15 }}
-          />
-          <span className="text-lg font-bold tracking-wide text-white drop-shadow-md transition-colors group-hover:text-red-400">
-            BookVault
-          </span>
-        </div>
-
-        {/* Navigation Links */}
-        <div className="hidden items-center gap-8 md:flex">
-          {["Library", "Collections", "Lore", "Membership"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
+    <>
+      {/* ✨ THE FIX: bg-transparent makes the bar completely invisible, removing the blur and the black fill ✨ */}
+      <nav className="fixed top-0 w-full z-50 bg-transparent">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          
+          {/* Logo Section */}
+          <div className="flex items-center gap-3">
+            
+            {/* Logo Wrapper (Keeps the hover tilt and soft red glow behind the image) */}
+            <motion.div 
+              onClick={() => setIsLogoModalOpen(true)}
+              className="relative flex items-center justify-center w-12 h-12 cursor-pointer group"
+              whileHover={{ rotate: 10, scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {item}
-            </a>
-          ))}
-        </div>
+              <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/40 blur-md rounded-full transition-all duration-300 pointer-events-none" />
 
-        {/* Enter Vault Button */}
-        <motion.button 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:shadow-[0_0_12px_rgba(255,255,255,0.3)]"
-        >
-          Enter Vault
-        </motion.button>
-      </div>
-    </motion.nav>
+              {/* Pure image blending (No square box) */}
+              <img 
+                src={vaultLogo}
+                alt="BookVault Logo"
+                className="w-full h-full object-contain mix-blend-lighten relative z-10"
+              />
+            </motion.div>
+
+            <span 
+              className="text-white font-bold text-xl tracking-wider hover:text-red-400 transition-colors cursor-pointer"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              BookVault
+            </span>
+          </div>
+
+          {/* Links */}
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+            <a href="#library" className="hover:text-white transition-colors drop-shadow-md">Library</a>
+            
+            <button 
+              onClick={onOpenVault}
+              className="hover:text-white transition-colors flex items-center gap-2 relative drop-shadow-md"
+            >
+              Collections
+              {savedCount > 0 && (
+                <span className="absolute -top-3 -right-4 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+                  {savedCount}
+                </span>
+              )}
+            </button>
+            
+            <a href="#lore" className="hover:text-white transition-colors drop-shadow-md">Lore</a>
+            <a href="#membership" className="hover:text-white transition-colors drop-shadow-md">Membership</a>
+          </div>
+
+          {/* Right CTA */}
+          <div>
+            <button className="px-5 py-2 border border-white/20 rounded-full text-white text-sm font-semibold hover:bg-white/10 transition-colors bg-black/20 backdrop-blur-sm">
+              Enter Vault
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* ✨ CINEMATIC LOGO MODAL ✨ */}
+      <AnimatePresence>
+        {isLogoModalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative bg-[#0a0a0e] border border-white/5 rounded-3xl p-10 flex flex-col items-center shadow-[0_0_60px_rgba(220,38,38,0.25)] max-w-sm w-full text-center"
+            >
+              <button 
+                onClick={() => setIsLogoModalOpen(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors z-20"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="absolute top-32 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-red-600/20 blur-[60px] pointer-events-none rounded-full" />
+
+              <img 
+                src={vaultLogo} 
+                alt="BookVault Crest" 
+                className="w-48 h-48 object-contain relative z-10 mb-6 mix-blend-lighten"
+              />
+
+              <h2 className="text-2xl font-bold text-white mb-2 relative z-10">
+                BookVault Crest
+              </h2>
+              <p className="text-[10px] font-bold text-red-500 tracking-[0.3em] uppercase relative z-10">
+                Arcane Library Emblem
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
