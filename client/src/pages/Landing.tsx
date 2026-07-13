@@ -14,7 +14,7 @@ export default function Landing() {
   const { scrollY } = useScroll();
   
   // Parallax effects
-  const backgroundY = useTransform(scrollY, [0, 1000], ['0%', '20%']);
+  const backgroundY = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
   const textY = useTransform(scrollY, [0, 1000], ['0%', '40%']);
   const textOpacity = useTransform(scrollY, [0, 400], [1, 0]);
 
