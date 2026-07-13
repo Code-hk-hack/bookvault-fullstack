@@ -169,3 +169,39 @@ This log documents the AI collaboration process, prompt strategies, outputs rece
   Workflow for `git add .`, `git commit -m "..."`, and `git push` to ensure the submitted repository reflects the latest full-stack capabilities.
 * **Refinement Made:** 
   Verified the status of the repository and successfully pushed the full-stack update to the live GitHub submission, ensuring the project remains compliant with internship submission requirements.
+
+---
+
+### Entry 15: Codebase Documentation Generation
+* **Prompt Written:** 
+  *"go through from all the files and make the md . file for that"*
+* **Purpose:** 
+  To generate a comprehensive documentation file (`CODEBASE.md`) outlining the directory structure, purpose of each file, and overall architecture of the BookVault full-stack repository.
+* **Output Received:** 
+  A detailed `CODEBASE.md` file distinguishing the Vite/React client components from the Express/Prisma server backend files.
+* **Refinement Made:** 
+  Saved directly to the project root for easy reference and repository completeness.
+
+---
+
+### Entry 16: Automated Backend/Frontend Debugging and Testing
+* **Prompt Written:** 
+  *"use browser mcp and go through all the files run all the servers and debug and fix"*
+* **Purpose:** 
+  To run both the frontend and backend servers, use an automated browser agent to test the UI and API integration, and debug any resulting issues.
+* **Output Received:** 
+  Identification of missing Prisma schema fields (`rating` and `lore`), disconnected API routing in `app.ts`, and non-functional frontend category filters. 
+* **Refinement Made:** 
+  Applied structural fixes across the stack: added missing schema fields, properly routed the Express backend, implemented dynamic React state filtering on the frontend, seeded the database, and verified functionality via a second automated browser test.
+
+---
+
+### Entry 17: Version Control Sync
+* **Prompt Written:** 
+  *"are you connect with my github repo of this project" / "yes ofcourse" (to push changes)*
+* **Purpose:** 
+  To commit the debugging fixes and new codebase documentation to the remote GitHub repository.
+* **Output Received:** 
+  Successful execution of git add, commit, and push to the `main` branch of the remote repository.
+* **Refinement Made:** 
+  Committed with a descriptive message outlining the fixes to ensure proper version tracking.
