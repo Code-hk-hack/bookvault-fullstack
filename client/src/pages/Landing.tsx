@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 export default function Landing() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState('All');
   
   // State to handle the full-screen logo animation
   const [logoExpanded, setLogoExpanded] = useState(false);
@@ -15,6 +16,10 @@ export default function Landing() {
       .then(data => { setBooks(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
   }, []);
+
+  const filteredBooks = selectedFilter === 'All' 
+    ? books 
+    : books.filter((book: any) => book.genre === selectedFilter);
 
   return (
     <div className="relative min-h-screen bg-[#030303] text-neutral-300 font-sans selection:bg-red-900 overflow-x-hidden">
@@ -217,11 +222,12 @@ export default function Landing() {
 
           {/* Filters */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {filters.map((filter, index) => (
+            {filters.map((filter) => (
               <button 
                 key={filter}
+                onClick={() => setSelectedFilter(filter)}
                 className={`px-5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all ${
-                  index === 0 
+                  selectedFilter === filter
                   ? 'bg-red-900/60 text-white border border-red-500/50 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]' 
                   : 'bg-black/60 text-neutral-300 border border-white/10 hover:border-white/30 hover:bg-black/80'
                 }`}
@@ -236,7 +242,7 @@ export default function Landing() {
             {loading ? (
               <div className="col-span-full text-center text-red-500 font-serif text-xl animate-pulse">Summoning archives...</div>
             ) : (
-              books.map((book: any) => (
+              filteredBooks.map((book: any) => (
                 <div 
                   key={book.id} 
                   className="group relative bg-[#0a0a0c]/70 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:border-red-900/80 transition-all duration-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] flex flex-col"
@@ -250,7 +256,7 @@ export default function Landing() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent" />
                     
                     <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-md border border-yellow-900/50 text-yellow-500 text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-                      <span>★</span> 4.8
+                      <span>★</span> {book.rating || 4.8}
                     </div>
                   </div>
                   
@@ -261,7 +267,7 @@ export default function Landing() {
                     </div>
                     
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
-                      <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold">Dark Fantasy</span>
+                      <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold">{book.genre || "Dark Fantasy"}</span>
                       <button className="text-neutral-400 hover:text-white transition-colors">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                       </button>

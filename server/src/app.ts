@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
+import bookRoutes from './routes/bookRoutes';
 dotenv.config();
 
 const app = express();
@@ -69,13 +69,9 @@ app.post('/api/auth/login', async (req, res): Promise<any> => {
 });
 
 // ==========================================
-// 📚 BOOK ROUTES (Placeholder for now)
+// 📚 BOOK ROUTES
 // ==========================================
-app.get('/api/books', async (req, res) => {
-  res.json([
-    { id: "1", title: "The Obsidian Grimoire", author: "Unknown", coverImage: "https://images.unsplash.com/photo-1605687707474-5178696238b9?q=80&w=600&auto=format&fit=crop" },
-  ]);
-});
+app.use('/api/books', bookRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🔮 Server running on port ${PORT}`));
