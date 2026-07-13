@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const [vaultBooks, setVaultBooks] = useState([]);
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -15,18 +16,17 @@ export default function Dashboard() {
       return;
     }
 
-    fetch(`http://localhost:5000/api/collections/${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setVaultBooks(data);
-        } else {
-          setVaultBooks([]);
-        }
+    Promise.all([
+      fetch(`http://localhost:5000/api/collections/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      fetch(`http://localhost:5000/api/auth/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
+    ])
+      .then(async ([collectionsRes, userRes]) => {
+        const collectionsData = await collectionsRes.json();
+        const userData = await userRes.json();
+        
+        if (Array.isArray(collectionsData)) setVaultBooks(collectionsData);
+        if (userData && !userData.error) setUser(userData);
+        
         setLoading(false);
       })
       .catch(err => {
@@ -81,14 +81,30 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-6 py-16 relative z-[10]">
         
         {/* Profile Header */}
-        <div className="mb-16 pb-8 border-b border-white/10 flex items-center gap-6">
-          <div className="w-24 h-24 rounded-full bg-red-900/20 border border-red-500/50 flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.3)]">
-            <span className="text-4xl text-red-500 font-serif">A</span>
+        <div className="mb-16 pb-8 border-b border-white/10 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className={`w-24 h-24 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.3)] ${user?.isPremium ? 'bg-yellow-900/20 border border-yellow-500/50' : 'bg-red-900/20 border border-red-500/50'}`}>
+              <span className={`text-4xl font-serif ${user?.isPremium ? 'text-yellow-500' : 'text-red-500'}`}>
+                {user?.email?.[0]?.toUpperCase() || 'A'}
+              </span>
+            </div>
+            <div>
+              <h1 className="text-4xl font-serif text-white mb-2">Your Personal Vault</h1>
+              <p className="text-neutral-400 text-sm tracking-widest uppercase mb-1">
+                Initiate Access Level: {user?.isPremium ? <span className="text-yellow-500 font-bold">Premium Scholar</span> : 'Standard'}
+              </p>
+              <p className="text-neutral-500 text-xs">{user?.email}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-serif text-white mb-2">Your Personal Vault</h1>
-            <p className="text-neutral-400 text-sm tracking-widest uppercase">Initiate Access Level: Scholar</p>
-          </div>
+          
+          {!user?.isPremium && (
+            <button 
+              onClick={() => navigate('/upgrade')}
+              className="bg-red-900/80 hover:bg-red-700 text-white font-bold uppercase tracking-widest px-6 py-3 rounded border border-red-500/50 transition-all drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+            >
+              Upgrade Vault
+            </button>
+          )}
         </div>
 
         {/* Vault Grid */}

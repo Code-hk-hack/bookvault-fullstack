@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import bookRoutes from './routes/bookRoutes';
 import collectionRoutes from './routes/collectionRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 dotenv.config();
 
 const app = express();
@@ -68,12 +69,26 @@ app.post('/api/auth/login', async (req, res): Promise<any> => {
     res.status(500).json({ error: "Login failed." });
   }
 });
+// 3. Get User Profile
+app.get('/api/auth/:id', async (req, res): Promise<any> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+      select: { id: true, email: true, role: true, isPremium: true, createdAt: true }
+    });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
 
 // ==========================================
 // 📚 BOOK ROUTES
 // ==========================================
 app.use('/api/books', bookRoutes);
 app.use('/api/collections', collectionRoutes);
+app.use('/api/payments', paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🔮 Server running on port ${PORT}`));

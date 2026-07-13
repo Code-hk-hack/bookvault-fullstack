@@ -10,8 +10,9 @@ datasource db {
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
-  password  String
+  password   String
   role       String   @default("USER")
+  isPremium  Boolean  @default(false)
   savedBooks Book[]   @relation("UserBooks")
   createdAt  DateTime @default(now())
 }

@@ -205,3 +205,15 @@ This log documents the AI collaboration process, prompt strategies, outputs rece
   Successful execution of git add, commit, and push to the `main` branch of the remote repository.
 * **Refinement Made:** 
   Committed with a descriptive message outlining the fixes to ensure proper version tracking.
+
+---
+
+### Entry 18: Payment Authentication Flow
+* **Prompt Written:** 
+  *"but i have to add an payment authentication in it"*
+* **Purpose:** 
+  To introduce a premium user tier through an authenticated checkout process, fulfilling the advanced requirement for the MVP.
+* **Output Received:** 
+  An implementation plan for a mock Stripe integration, including schema updates (`isPremium`), backend webhooks (`/api/payments/success`), and a frontend checkout UI.
+* **Refinement Made:** 
+  Built `Upgrade.tsx` (pricing page) and `MockCheckout.tsx` (simulated payment flow). Integrated backend logic to upgrade the user's role to "Premium Scholar" in PostgreSQL after a successful mock transaction.
