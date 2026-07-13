@@ -19,8 +19,10 @@ Standard book platforms (like Goodreads) use bright, commercial layouts that rui
 
 ## 🛠️ Technology Stack
 * **Frontend:** React.js, Tailwind CSS
+* **Backend:** Node.js, Express.js
+* **Database:** PostgreSQL (Neon Serverless), Prisma ORM
+* **Authentication:** JSON Web Tokens (JWT)
 * **Animations:** Framer Motion
-* **Icons:** Lucide React
 * **Version Control:** Git & GitHub
 
 ---
@@ -33,15 +35,15 @@ Standard book platforms (like Goodreads) use bright, commercial layouts that rui
 - [x] Interactive Framer Motion Animated Navbar
 - [x] Responsive Layout & Radial Gradient Effects
 
-### Phase 2: Core Library Features (In Progress ⏳)
-- [ ] Interactive Book Grid & Filtering System
-- [ ] Lore Reader Modal Component
-- [ ] User Vault / Saved Bookshelf State
+### Phase 2: Core Library Features (Completed ✅)
+- [x] Interactive Book Grid & Filtering System
+- [x] Lore Reader Modal Component
+- [x] User Vault / Saved Bookshelf State
 
-### Phase 3: Authentication & Backend (Planned 🔮)
-- [ ] User Authentication (JWT)
-- [ ] Community Book Ratings & Reviews
-- [ ] Personal Arcane Reading Stats Dashboard
+### Phase 3: Authentication & Backend (Completed ✅)
+- [x] User Authentication (JWT)
+- [x] Backend CRUD API & Database Integration
+- [x] Personal Arcane Reading Stats Dashboard
 
 ---
 
@@ -54,3 +56,32 @@ client/
     ├── components/      # Reusable React UI components (Hero, Navbar)
     ├── App.js           # Main Application Layout
     └── index.css        # Global Tailwind & Custom Glow Utility Styles
+```
+
+---
+
+## 🏆 Internship Progress Documentation
+
+### Features Completed
+1. **Secure Authentication:** Built a robust JWT-based login/signup flow with salted hashing using bcrypt.
+2. **Dynamic Dashboard:** A customized user vault displaying saved books associated with their unique profile.
+3. **CRUD API Operations:** Created Express routes connected to Prisma ORM to create, read, and delete books from the user's personal vault.
+4. **Interactive UI:** Successfully implemented client-side state for category filtering, accompanied by Framer Motion animations.
+5. **Database Integration:** Successfully implemented PostgreSQL hosting via Neon.
+
+### Features Pending
+* **Community Features:** Expanding the database to allow user reviews and public ratings on individual tomes.
+* **Admin Upload Panel:** Allowing authorized users to manually add new books to the public directory.
+
+### Challenges Faced
+* **Schema Relationships:** Originally struggled to map user collections without creating overly complex relational tables.
+* **API Routing Mismatches:** Facing CORS errors and debugging hardcoded data paths preventing the frontend from reading live database entries.
+
+### Solutions Implemented
+* Adopted **Prisma's implicit many-to-many relationships** (`savedBooks Book[]` & `savedBy User[]`) to streamline vault architecture and significantly reduce query times.
+* Implemented a **Browser Subagent / Automated Testing Tool** to traverse the running servers, identify the hardcoded API paths, and correct the Express routing files to use dynamic PostgreSQL data.
+
+### Next Development Milestones
+1. Deploying the frontend to Vercel and the backend to Render.
+2. Implementing OAuth (Google/GitHub login) for faster onboarding.
+3. Building the "Arcane Reader" modal to allow users to read the full `lore` chapters directly within the browser.

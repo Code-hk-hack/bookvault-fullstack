@@ -2,10 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 
-// Placeholder for Dashboard (we will build this next)
-function Dashboard() {
-  return <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center text-4xl font-serif">Welcome to the Secret Vault</div>;
-}
+import Dashboard from './pages/Dashboard';
 
 export default function App() {
   return (

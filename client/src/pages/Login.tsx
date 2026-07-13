@@ -30,6 +30,7 @@ export default function Login() {
       
       // Success! Save the security token to the browser
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.user.id);
       
       // Send the user to the secret dashboard
       navigate('/dashboard');

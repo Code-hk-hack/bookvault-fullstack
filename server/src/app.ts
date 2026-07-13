@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import bookRoutes from './routes/bookRoutes';
+import collectionRoutes from './routes/collectionRoutes';
 dotenv.config();
 
 const app = express();
@@ -72,6 +73,7 @@ app.post('/api/auth/login', async (req, res): Promise<any> => {
 // 📚 BOOK ROUTES
 // ==========================================
 app.use('/api/books', bookRoutes);
+app.use('/api/collections', collectionRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🔮 Server running on port ${PORT}`));
