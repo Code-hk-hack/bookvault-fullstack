@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Bookmark, Library, LayoutGrid, BookOpen, LogIn } from 'lucide-react';
 
 export default function Landing() {
@@ -11,12 +11,6 @@ export default function Landing() {
 
   const filters = ["All", "Fantasy", "Adventure", "Dark Magic", "Romance"];
   const navigate = useNavigate();
-  const { scrollY } = useScroll();
-  
-  // Parallax effects
-  const backgroundY = useTransform(scrollY, [0, 1000], ['0%', '-15%']);
-  const textY = useTransform(scrollY, [0, 1000], ['0%', '40%']);
-  const textOpacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   const handleSaveToVault = async (bookId: string) => {
     const token = localStorage.getItem('token');
@@ -51,16 +45,6 @@ export default function Landing() {
     ? books 
     : books.filter((book: any) => book.genre === selectedFilter);
 
-  // Stagger animation configuration
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15 } }
-  };
-
   return (
     <motion.div 
       initial={{ opacity: 0 }} 
@@ -84,6 +68,32 @@ export default function Landing() {
           0% { transform: translateY(10vh) translateX(0) scale(1); opacity: 0; }
           20%, 80% { opacity: var(--max-opacity); }
           100% { transform: translateY(-100vh) translateX(var(--drift)) scale(0.5); opacity: 0; }
+        }
+        
+        /* Modern Web Guidance: Native CSS Scroll-Driven Parallax */
+        @keyframes parallax-bg {
+          from { transform: translateY(0px); }
+          to { transform: translateY(200px); }
+        }
+        @keyframes parallax-fg {
+          from { transform: translateY(0px); }
+          to { transform: translateY(400px); }
+        }
+        @keyframes parallax-hero-anim {
+          from { transform: translateY(0px); opacity: 1; }
+          to { transform: translateY(150px); opacity: 0; }
+        }
+        .parallax-background {
+          animation: parallax-bg linear both;
+          animation-timeline: scroll(root);
+        }
+        .parallax-characters {
+          animation: parallax-fg linear both;
+          animation-timeline: scroll(root);
+        }
+        .parallax-hero {
+          animation: parallax-hero-anim linear both;
+          animation-timeline: scroll(root);
         }
       `}</style>
 
@@ -126,13 +136,13 @@ export default function Landing() {
       </AnimatePresence>
 
       {/* Layer 1: Parallax Background */}
-      <motion.div className="fixed inset-0 z-0 pointer-events-none" style={{ y: backgroundY }}>
+      <div className="fixed inset-0 z-0 pointer-events-none parallax-background">
         <div className="absolute inset-0 bg-[url('/background.png')] bg-cover bg-center opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-80" />
-      </motion.div>
+      </div>
 
       {/* Layer 2: Scaled Characters */}
-      <div className="fixed inset-0 z-[1] pointer-events-none">
+      <div className="fixed inset-0 z-[1] pointer-events-none parallax-characters">
         <img src="/corner-bottom-left.png" className="absolute -bottom-4 -left-4 w-72 opacity-80 mix-blend-lighten" style={{ WebkitMaskImage: 'radial-gradient(circle at bottom left, black 50%, transparent 80%)' }} alt="" />
         <img src="/corner-bottom-right.png" className="absolute -bottom-4 -right-4 w-72 opacity-80 mix-blend-lighten" style={{ WebkitMaskImage: 'radial-gradient(circle at bottom right, black 50%, transparent 80%)' }} alt="" />
         <img src="/corner-top.png" className="absolute top-24 -right-4 w-[300px] opacity-80 mix-blend-lighten" style={{ WebkitMaskImage: 'radial-gradient(ellipse at right center, black 30%, transparent 75%)' }} alt="" />
@@ -194,10 +204,7 @@ export default function Landing() {
         </motion.nav>
 
         {/* Hero Section */}
-        <motion.header 
-          style={{ y: textY, opacity: textOpacity }}
-          className="max-w-4xl mx-auto text-center pt-[25vh] pb-[25vh] px-4 relative z-[10]"
-        >
+        <header className="parallax-hero max-w-4xl mx-auto text-center pt-[25vh] pb-[25vh] px-4 relative z-[10]">
           <motion.h1 
             initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 1, ease: 'easeOut' }}
             className="text-5xl md:text-8xl font-black text-white font-serif mb-6 leading-tight drop-shadow-[0_5px_15px_rgba(0,0,0,1)]"
@@ -211,7 +218,7 @@ export default function Landing() {
           >
             BookVault is a sanctuary for the stories the world tried to bury. Descend into an ever-growing collection of dark fantasy legends, arcane lore, and untold epics.
           </motion.p>
-        </motion.header>
+        </header>
 
         {/* The Vault Grid Section */}
         <motion.section 
@@ -248,58 +255,46 @@ export default function Landing() {
           {loading ? (
             <div className="text-center text-red-500 font-serif text-xl animate-pulse py-20">Summoning archives...</div>
           ) : (
-            <motion.main 
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredBooks.map((book: any) => (
-                  <motion.div 
-                    layout
-                    variants={itemVariants}
-                    key={book.id} 
-                    className="group relative bg-[#0a0a0c] backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden hover:border-red-900/80 transition-all duration-500 flex flex-col shadow-2xl"
-                    whileHover={{ y: -10, scale: 1.02 }}
-                  >
-                    <div className="relative h-80 w-full overflow-hidden">
-                      <img 
-                        src={book.coverImage} 
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-700 ease-out" 
-                        alt={book.title}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/20 to-transparent" />
-                      
-                      <div className="absolute top-4 right-4 bg-black/90 border border-yellow-900/50 text-yellow-500 text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-[0_0_15px_rgba(0,0,0,1)] backdrop-blur-md">
-                        <span>★</span> {book.rating || 4.8}
-                      </div>
+            <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {filteredBooks.map((book: any, index: number) => (
+                <div 
+                  key={book.id} 
+                  className="animate-fade-in-up group relative bg-[#0a0a0c] backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden hover:border-red-900/80 transition-all duration-500 flex flex-col shadow-2xl hover:-translate-y-2 hover:scale-[1.02]"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <div className="relative h-80 w-full overflow-hidden">
+                    <img 
+                      src={book.coverImage} 
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-700 ease-out" 
+                      alt={book.title}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/20 to-transparent" />
+                    
+                    <div className="absolute top-4 right-4 bg-black/90 border border-yellow-900/50 text-yellow-500 text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1 shadow-[0_0_15px_rgba(0,0,0,1)] backdrop-blur-md">
+                      <span>★</span> {book.rating || 4.8}
+                    </div>
+                  </div>
+                  
+                  <div className="p-6 flex-1 flex flex-col justify-between relative z-10 -mt-10">
+                    <div>
+                      <h3 className="text-white font-serif font-bold text-xl mb-1 line-clamp-1 drop-shadow-md">{book.title}</h3>
+                      <p className="text-red-400 text-xs mb-4 uppercase tracking-widest font-semibold">{book.author}</p>
                     </div>
                     
-                    <div className="p-6 flex-1 flex flex-col justify-between relative z-10 -mt-10">
-                      <div>
-                        <h3 className="text-white font-serif font-bold text-xl mb-1 line-clamp-1 drop-shadow-md">{book.title}</h3>
-                        <p className="text-red-400 text-xs mb-4 uppercase tracking-widest font-semibold">{book.author}</p>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/10">
-                        <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold">{book.genre || "Dark Fantasy"}</span>
-                        <motion.button 
-                          title="Save to Vault"
-                          whileHover={{ scale: 1.2, color: "#ef4444" }} 
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleSaveToVault(book.id)} 
-                          className="text-neutral-400 transition-colors p-2"
-                        >
-                          <Bookmark size={20} />
-                        </motion.button>
-                      </div>
+                    <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/10">
+                      <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold">{book.genre || "Dark Fantasy"}</span>
+                      <button 
+                        title="Save to Vault"
+                        onClick={() => handleSaveToVault(book.id)} 
+                        className="text-neutral-400 transition-colors p-2 hover:text-red-500 hover:scale-110 active:scale-95"
+                      >
+                        <Bookmark size={20} />
+                      </button>
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.main>
+                  </div>
+                </div>
+              ))}
+            </main>
           )}
         </motion.section>
       </div>
