@@ -73,15 +73,15 @@ export default function Landing() {
         /* Modern Web Guidance: Native CSS Scroll-Driven Parallax */
         @keyframes parallax-bg {
           from { transform: translateY(0px); }
-          to { transform: translateY(200px); }
+          to { transform: translateY(-200px); }
         }
         @keyframes parallax-fg {
           from { transform: translateY(0px); }
-          to { transform: translateY(400px); }
+          to { transform: translateY(-300px); }
         }
         @keyframes parallax-hero-anim {
           from { transform: translateY(0px); opacity: 1; }
-          to { transform: translateY(150px); opacity: 0; }
+          to { transform: translateY(-100px); opacity: 0; }
         }
         .parallax-background {
           animation: parallax-bg linear both;
@@ -136,7 +136,7 @@ export default function Landing() {
       </AnimatePresence>
 
       {/* Layer 1: Parallax Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none parallax-background">
+      <div className="fixed -top-[300px] -bottom-[300px] inset-x-0 z-0 pointer-events-none parallax-background">
         <div className="absolute inset-0 bg-[url('/background.png')] bg-cover bg-center opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-80" />
       </div>
