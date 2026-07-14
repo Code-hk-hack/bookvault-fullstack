@@ -16,7 +16,7 @@ export default function Upgrade() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/payments/create-checkout-session', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/payments/create-checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ userId })

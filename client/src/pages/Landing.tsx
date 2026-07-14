@@ -45,7 +45,7 @@ export default function Landing() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/collections', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ userId, bookId })
@@ -58,7 +58,7 @@ export default function Landing() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/books')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/books`)
       .then(res => res.json())
       .then(data => { setBooks(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });

@@ -25,7 +25,7 @@ export default function Login() {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
     
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -53,7 +53,7 @@ export default function Login() {
     setLoading(true);
     try {
       const mockName = `scholar_${Math.floor(Math.random() * 1000)}`;
-      const res = await fetch(`http://localhost:5000/api/auth/google`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: `mock_token_${mockName}` })

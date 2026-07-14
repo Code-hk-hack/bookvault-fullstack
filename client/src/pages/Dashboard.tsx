@@ -37,8 +37,8 @@ export default function Dashboard() {
     }
 
     Promise.all([
-      fetch(`http://localhost:5000/api/collections/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
-      fetch(`http://localhost:5000/api/auth/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
     ])
       .then(async ([collectionsRes, userRes]) => {
         const collectionsData = await collectionsRes.json();
@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   const handleRemove = async (bookId: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/collections`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ userId, bookId })

@@ -24,7 +24,7 @@ export default function Lore() {
   const [selectedLoreBook, setSelectedLoreBook] = useState<{title: string, lore: string | null} | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/books')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/books`)
       .then(res => res.json())
       .then(data => { setBooks(data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
