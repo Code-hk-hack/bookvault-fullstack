@@ -162,7 +162,7 @@ export default function Landing() {
         {/* Navigation */}
         <motion.nav 
           initial={{ y: -100 }} animate={{ y: 0 }} transition={{ type: 'spring', damping: 20 }}
-          className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between relative z-[20] bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm sticky top-0"
+          className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between relative z-[20] bg-transparent sticky top-0"
         >
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setLogoExpanded(true)}>
             <img src="/logo.png" className="w-10 h-10 object-contain rounded-full drop-shadow-[0_0_12px_rgba(220,38,38,0.9)] group-hover:scale-110 transition-all duration-300" style={{ WebkitMaskImage: 'radial-gradient(circle, black 65%, transparent 100%)', maskImage: 'radial-gradient(circle, black 65%, transparent 100%)' }} alt="Logo" />
