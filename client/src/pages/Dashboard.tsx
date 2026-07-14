@@ -1,11 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Scroll } from 'lucide-react';
+import LoreModal from '../components/LoreModal';
+
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  genre?: string;
+  coverImage?: string;
+  rating?: number;
+  lore?: string;
+}
+
+interface User {
+  id: string;
+  email: string;
+  isPremium?: boolean;
+}
 
 export default function Dashboard() {
-  const [vaultBooks, setVaultBooks] = useState<any[]>([]);
-  const [user, setUser] = useState<any>(null);
+  const [vaultBooks, setVaultBooks] = useState<Book[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedLoreBook, setSelectedLoreBook] = useState<{title: string, lore: string | null} | null>(null);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem('userId');
@@ -44,7 +63,7 @@ export default function Dashboard() {
         body: JSON.stringify({ userId, bookId })
       });
       if (res.ok) {
-        setVaultBooks(prev => prev.filter((book: any) => book.id !== bookId));
+        setVaultBooks(prev => prev.filter(book => book.id !== bookId));
       }
     } catch (error) {
       console.error("Failed to remove book", error);
@@ -69,49 +88,49 @@ export default function Dashboard() {
       {/* Navbar */}
       <motion.nav 
         initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-        className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between relative z-[20] border-b border-white/5 backdrop-blur-sm"
+        className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-between relative z-[20] border-b border-white/5 backdrop-blur-sm gap-4 sm:gap-0"
       >
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-          <img src="/logo.png" className="w-10 h-10 object-contain rounded-full drop-shadow-[0_0_12px_rgba(220,38,38,0.9)]" style={{ WebkitMaskImage: 'radial-gradient(circle, black 65%, transparent 100%)', maskImage: 'radial-gradient(circle, black 65%, transparent 100%)' }} alt="Logo" />
-          <span className="text-white font-serif font-bold text-2xl tracking-widest group-hover:text-red-200 transition-colors">
+          <img src="/logo.png" className="w-8 h-8 sm:w-10 sm:h-10 object-contain rounded-full drop-shadow-[0_0_12px_rgba(220,38,38,0.9)]" style={{ WebkitMaskImage: 'radial-gradient(circle, black 65%, transparent 100%)', maskImage: 'radial-gradient(circle, black 65%, transparent 100%)' }} alt="Logo" />
+          <span className="text-white font-serif font-bold text-xl sm:text-2xl tracking-widest group-hover:text-red-200 transition-colors">
             BookVault
           </span>
         </div>
         <div className="flex items-center gap-6 text-sm font-bold tracking-widest uppercase">
-          <span className="text-neutral-400">Archivist Profile</span>
+          <span className="hidden sm:block text-neutral-400">Archivist Profile</span>
           <motion.button 
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={handleLogout} 
-            className="text-red-500 border border-red-900/50 hover:bg-red-900/20 px-4 py-2 rounded transition-all"
+            className="text-red-500 border border-red-900/50 hover:bg-red-900/20 px-3 sm:px-4 py-1.5 sm:py-2 rounded transition-all text-xs sm:text-sm"
           >
             Logout
           </motion.button>
         </div>
       </motion.nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-16 relative z-[10]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 relative z-[10]">
         
         {/* Profile Header */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="mb-16 pb-8 border-b border-white/10 flex items-center justify-between"
+          className="mb-8 sm:mb-16 pb-6 sm:pb-8 border-b border-white/10 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 sm:gap-0 text-center sm:text-left"
         >
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             <motion.div 
               animate={user?.isPremium ? { scale: [1, 1.05, 1], boxShadow: ["0 0 20px rgba(234,179,8,0.3)", "0 0 40px rgba(234,179,8,0.6)", "0 0 20px rgba(234,179,8,0.3)"] } : {}}
               transition={user?.isPremium ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : {}}
-              className={`w-24 h-24 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.3)] ${user?.isPremium ? 'bg-yellow-900/20 border border-yellow-500/50' : 'bg-red-900/20 border border-red-500/50'}`}
+              className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.3)] ${user?.isPremium ? 'bg-yellow-900/20 border border-yellow-500/50' : 'bg-red-900/20 border border-red-500/50'}`}
             >
-              <span className={`text-4xl font-serif ${user?.isPremium ? 'text-yellow-500' : 'text-red-500'}`}>
+              <span className={`text-3xl sm:text-4xl font-serif ${user?.isPremium ? 'text-yellow-500' : 'text-red-500'}`}>
                 {user?.email?.[0]?.toUpperCase() || 'A'}
               </span>
             </motion.div>
             <div>
-              <h1 className="text-4xl font-serif text-white mb-2">Your Personal Vault</h1>
-              <p className="text-neutral-400 text-sm tracking-widest uppercase mb-1">
+              <h1 className="text-3xl sm:text-4xl font-serif text-white mb-2">Your Personal Vault</h1>
+              <p className="text-neutral-400 text-[10px] sm:text-sm tracking-widest uppercase mb-1">
                 Initiate Access Level: {user?.isPremium ? <span className="text-yellow-500 font-bold drop-shadow-[0_0_5px_rgba(234,179,8,0.8)]">Premium Scholar</span> : 'Standard'}
               </p>
-              <p className="text-neutral-500 text-xs">{user?.email}</p>
+              <p className="text-neutral-500 text-[10px] sm:text-xs">{user?.email}</p>
             </div>
           </div>
           
@@ -119,7 +138,7 @@ export default function Dashboard() {
             <motion.button 
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/upgrade')}
-              className="bg-red-900/80 hover:bg-red-700 text-white font-bold uppercase tracking-widest px-6 py-3 rounded border border-red-500/50 transition-all drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+              className="w-full sm:w-auto bg-red-900/80 hover:bg-red-700 text-white font-bold uppercase tracking-widest px-4 sm:px-6 py-3 rounded border border-red-500/50 transition-all drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] text-xs sm:text-base"
             >
               Upgrade Vault
             </motion.button>
@@ -149,7 +168,7 @@ export default function Dashboard() {
             </motion.div>
           ) : (
             <AnimatePresence>
-              {vaultBooks.map((book: any, i) => (
+              {vaultBooks.map((book, i) => (
                 <motion.div 
                   layout
                   initial={{ opacity: 0, y: 50 }}
@@ -176,6 +195,16 @@ export default function Dashboard() {
                       <h3 className="text-white font-bold text-base mb-1 line-clamp-1">{book.title}</h3>
                       <p className="text-neutral-400 text-xs">{book.author}</p>
                     </div>
+                    
+                    <div className="mt-4 pt-3 border-t border-white/10 flex justify-end">
+                      <button 
+                        title="Read Lore"
+                        onClick={() => setSelectedLoreBook({ title: book.title, lore: book.lore || null })} 
+                        className="text-neutral-400 transition-colors p-2 hover:text-red-500 hover:scale-110 active:scale-95"
+                      >
+                        <Scroll size={20} />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -183,6 +212,13 @@ export default function Dashboard() {
           )}
         </motion.div>
       </main>
+      
+      <LoreModal 
+        isOpen={selectedLoreBook !== null} 
+        onClose={() => setSelectedLoreBook(null)}
+        bookTitle={selectedLoreBook?.title || ''}
+        lore={selectedLoreBook?.lore || null}
+      />
     </motion.div>
   );
 }

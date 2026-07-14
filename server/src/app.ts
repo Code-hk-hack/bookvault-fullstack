@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 import bookRoutes from './routes/bookRoutes';
 import collectionRoutes from './routes/collectionRoutes';
 import paymentRoutes from './routes/paymentRoutes';
@@ -69,6 +70,58 @@ app.post('/api/auth/login', async (req, res): Promise<any> => {
     res.status(500).json({ error: "Login failed." });
   }
 });
+
+// 2.5 Google OAuth Login
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'dummy-client-id');
+app.post('/api/auth/google', async (req, res): Promise<any> => {
+  try {
+    const { credential } = req.body;
+    let email, name;
+
+    try {
+      // Attempt to verify token with Google
+      const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID || 'dummy-client-id',
+      });
+      const payload = ticket.getPayload();
+      if (payload) {
+        email = payload.email;
+        name = payload.name;
+      }
+    } catch (err) {
+      console.log('Google verification failed, assuming mock token for demonstration purposes.');
+      // MOCK FLOW: If verification fails (e.g. using dummy client ID), we extract email from the mock token
+      // In a real production app, we would throw an error here.
+      if (credential.startsWith('mock_token_')) {
+        email = credential.split('_')[2] + '@mock.com';
+      } else {
+        return res.status(401).json({ error: 'Invalid Google token.' });
+      }
+    }
+
+    if (!email) return res.status(400).json({ error: 'Failed to retrieve email from Google.' });
+
+    // Check if user exists
+    let user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      // Create user if they don't exist, using a secure randomized dummy password
+      const dummyPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), 10);
+      user = await prisma.user.create({
+        data: { email, password: dummyPassword }
+      });
+    }
+
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET as string || 'supersecret', { expiresIn: '1d' });
+    
+    res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Google Login failed." });
+  }
+});
+
 // 3. Get User Profile
 app.get('/api/auth/:id', async (req, res): Promise<any> => {
   try {

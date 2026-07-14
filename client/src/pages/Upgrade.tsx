@@ -39,13 +39,13 @@ export default function Upgrade() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] opacity-90" />
       
       <div className="relative z-10 text-center mb-12">
-        <h1 className="text-5xl font-serif font-bold tracking-wider mb-4 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+        <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-wider mb-4 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
           Become a Premium Scholar
         </h1>
         <p className="text-neutral-400 text-lg">Unlock forbidden lore and infinite vault storage.</p>
       </div>
 
-      <div className="relative z-10 bg-[#0a0a0c]/80 backdrop-blur-xl border border-red-900/50 rounded-2xl p-8 max-w-sm w-full shadow-[0_0_50px_rgba(220,38,38,0.2)]">
+      <div className="relative z-10 bg-[#0a0a0c]/80 backdrop-blur-xl border border-red-900/50 rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-[0_0_50px_rgba(220,38,38,0.2)] mx-4 sm:mx-0">
         <div className="text-center mb-6">
           <span className="text-red-500 font-bold tracking-widest uppercase text-sm">One-time Fee</span>
           <div className="text-4xl font-serif text-white mt-2 mb-4">$49.99</div>

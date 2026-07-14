@@ -7,12 +7,12 @@ export const createUser = async (req: Request, res: Response) => {
     const username = String(req.body.username);
     
     const existingUser = await prisma.user.findFirst({
-      where: { OR: [{ email }, { username }] },
+      where: { email },
     });
     
     if (existingUser) return res.status(400).json({ error: 'User exists' });
     
-    const newUser = await prisma.user.create({ data: { email, username } });
+    const newUser = await prisma.user.create({ data: { email, password: 'hashedpassword' } });
     return res.status(201).json(newUser);
   } catch (error) {
     return res.status(500).json({ error: 'Failed to create user' });
@@ -25,7 +25,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
     
     const user = await prisma.user.findUnique({
       where: { id: id },
-      include: { collections: { include: { book: true } } },
+      include: { savedBooks: true },
     });
     
     if (!user) return res.status(404).json({ error: 'User not found' });
