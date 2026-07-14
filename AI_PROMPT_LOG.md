@@ -217,3 +217,39 @@ This log documents the AI collaboration process, prompt strategies, outputs rece
   An implementation plan for a mock Stripe integration, including schema updates (`isPremium`), backend webhooks (`/api/payments/success`), and a frontend checkout UI.
 * **Refinement Made:** 
   Built `Upgrade.tsx` (pricing page) and `MockCheckout.tsx` (simulated payment flow). Integrated backend logic to upgrade the user's role to "Premium Scholar" in PostgreSQL after a successful mock transaction.
+
+---
+
+### Entry 19: Google OAuth Mock Integration
+* **Prompt Written:** 
+  *"add a google login button and implement oauth"*
+* **Purpose:** 
+  To provide a frictionless onboarding experience for users without requiring manual email/password registration.
+* **Output Received:** 
+  A complete mock Google OAuth flow designed to bypass the need for a live Developer Console Client ID during the prototyping phase.
+* **Refinement Made:** 
+  Integrated a secure mock token generator into `Login.tsx` and updated the Express backend to automatically create a user profile in the Neon database if the email doesn't exist.
+
+---
+
+### Entry 20: Arcane Reader & Lore Implementation
+* **Prompt Written:** 
+  *"look into libabary button collections lore button its not working and add this in mobile version also"*
+* **Purpose:** 
+  To build a dedicated lore browsing experience and ensure mobile responsiveness for the platform's core navigation.
+* **Output Received:** 
+  A brand new `/lore` route, a stunning dark-fantasy themed scroll `LoreModal`, and updated mobile navigation states in the `Landing.tsx` component.
+* **Refinement Made:** 
+  Added 'Read Lore' action buttons directly to the book cards in both the global library and the personal vault, triggering a visually immersive reading experience with Framer Motion transitions.
+
+---
+
+### Entry 21: Full-Stack Production Deployment
+* **Prompt Written:** 
+  *"okiee but i have to depoly it first can you suggest me where i do verrcel is good or not"* / *"what i write in it"* / *"still eror"*
+* **Purpose:** 
+  To transition the application from a local development environment to a live, production-ready state across the web.
+* **Output Received:** 
+  Strategic deployment advice (Frontend to Vercel, Backend to Render) and specific troubleshooting steps to resolve Vercel's React Router 404 errors using a custom `vercel.json`.
+* **Refinement Made:** 
+  Dynamically updated all 10 API endpoints in the React frontend to utilize the `VITE_API_URL` environment variable, ensuring seamless communication with the live Render backend without hardcoded localhost strings. Pushed all final changes to the main GitHub repository.
