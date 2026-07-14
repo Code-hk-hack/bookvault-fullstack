@@ -173,13 +173,23 @@ export default function Landing() {
             <a href="#" className="flex items-center gap-2 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all"><Library size={16}/> Library</a>
             <a href="#" className="flex items-center gap-2 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all"><LayoutGrid size={16}/> Collections</a>
             <a href="#" className="flex items-center gap-2 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all"><BookOpen size={16}/> Lore</a>
-            <motion.a 
-              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              href="/login" 
-              className="flex items-center gap-2 text-red-500 border border-red-900/50 hover:bg-red-900/20 px-5 py-2 rounded transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
-            >
-              <LogIn size={16}/> Enter Vault
-            </motion.a>
+            {localStorage.getItem('token') ? (
+              <motion.button 
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center gap-2 text-red-500 border border-red-900/50 hover:bg-red-900/20 px-5 py-2 rounded transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+              >
+                <Library size={16}/> My Vault
+              </motion.button>
+            ) : (
+              <motion.button 
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/login')}
+                className="flex items-center gap-2 text-red-500 border border-red-900/50 hover:bg-red-900/20 px-5 py-2 rounded transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]"
+              >
+                <LogIn size={16}/> Enter Vault
+              </motion.button>
+            )}
           </div>
         </motion.nav>
 
@@ -276,6 +286,7 @@ export default function Landing() {
                       <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/10">
                         <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold">{book.genre || "Dark Fantasy"}</span>
                         <motion.button 
+                          title="Save to Vault"
                           whileHover={{ scale: 1.2, color: "#ef4444" }} 
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleSaveToVault(book.id)} 
