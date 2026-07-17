@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Search, LayoutGrid } from 'lucide-react';
 import LoreModal from '../components/LoreModal';
+import { fetchJSON } from '../utils/api';
 
 interface Book {
   id: string;
@@ -17,6 +18,7 @@ interface Book {
 export default function Lore() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   
@@ -24,10 +26,15 @@ export default function Lore() {
   const [selectedLoreBook, setSelectedLoreBook] = useState<{title: string, lore: string | null} | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/books`)
-      .then(res => res.json())
-      .then(data => { setBooks(data); setLoading(false); })
-      .catch(err => { console.error(err); setLoading(false); });
+    fetchJSON<Book[]>('/api/books', { timeoutMs: 8000 })
+      .then(data => {
+        if (data) {
+          setBooks(data);
+        } else {
+          setApiError(true);
+        }
+        setLoading(false);
+      });
   }, []);
 
   const filteredBooks = books.filter(book => 
@@ -94,6 +101,10 @@ export default function Lore() {
         {/* Lore List */}
         {loading ? (
           <div className="text-center text-red-500 font-serif text-xl animate-pulse py-20">Unsealing texts...</div>
+        ) : apiError ? (
+          <div className="text-center py-20 text-neutral-500 font-serif text-xl">
+            The ancient server is awakening. Try again in a moment.
+          </div>
         ) : (
           <div className="space-y-6">
             <AnimatePresence>
@@ -105,7 +116,7 @@ export default function Lore() {
                   className="bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 hover:border-red-900/50 transition-all group"
                 >
                   <div className="w-full md:w-48 h-64 shrink-0 overflow-hidden rounded-xl">
-                    <img src={book.coverImage} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" alt={book.title} />
+                    <img src={book.coverImage} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" alt={book.title} loading="lazy" />
                   </div>
                   
                   <div className="flex-1 flex flex-col justify-center">

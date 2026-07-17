@@ -7,7 +7,9 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     
     // In a real application, this would call stripe.checkout.sessions.create()
     // For our prototype, we will return a URL to our Mock Checkout page.
-    const mockCheckoutUrl = `http://localhost:5173/mock-checkout?userId=${userId}`;
+    // Use CLIENT_URL env var for production, fallback to localhost for dev
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const mockCheckoutUrl = `${clientUrl}/mock-checkout?userId=${userId}`;
     
     return res.status(200).json({ url: mockCheckoutUrl });
   } catch (error) {

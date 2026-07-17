@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scroll } from 'lucide-react';
 import LoreModal from '../components/LoreModal';
+import { fetchJSON } from '../utils/api';
 
 interface Book {
   id: string;
@@ -37,20 +38,18 @@ export default function Dashboard() {
     }
 
     Promise.all([
-      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
-      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
-    ])
-      .then(async ([collectionsRes, userRes]) => {
-        const collectionsData = await collectionsRes.json();
-        const userData = await userRes.json();
-        
-        if (Array.isArray(collectionsData)) setVaultBooks(collectionsData);
-        if (userData && !userData.error) setUser(userData);
-        
-        setLoading(false);
+      fetchJSON<Book[]>(`/api/collections/${userId}`, { 
+        timeoutMs: 8000,
+        headers: { 'Authorization': `Bearer ${token}` } 
+      }),
+      fetchJSON<User>(`/api/auth/${userId}`, { 
+        timeoutMs: 8000,
+        headers: { 'Authorization': `Bearer ${token}` } 
       })
-      .catch(err => {
-        console.error(err);
+    ])
+      .then(([collectionsData, userData]) => {
+        if (collectionsData && Array.isArray(collectionsData)) setVaultBooks(collectionsData);
+        if (userData && !('error' in userData)) setUser(userData);
         setLoading(false);
       });
   }, [navigate, token, userId]);
@@ -179,7 +178,7 @@ export default function Dashboard() {
                   className="group relative bg-[#0a0a0c]/80 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:border-red-900/80 transition-colors duration-300 flex flex-col"
                 >
                   <div className="relative h-64 w-full overflow-hidden">
-                    <img src={book.coverImage} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-700" alt={book.title} />
+                    <img src={book.coverImage} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-transform duration-700" alt={book.title} loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent" />
                     <motion.button 
                       whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
