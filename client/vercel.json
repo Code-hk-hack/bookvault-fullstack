@@ -1,7 +1,12 @@
 {
-  "installCommand": "npm install && npx prisma generate",
-  "buildCommand": "npx tsc -b && npx vite build",
+  "installCommand": "npm install",
+  "buildCommand": "npx prisma generate && npx tsc -b && npx vite build",
   "outputDirectory": "dist",
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "JWT_SECRET": "@jwt-secret",
+    "GOOGLE_CLIENT_ID": "@google-client-id"
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
