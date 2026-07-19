@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bookmark, Library, LayoutGrid, BookOpen, LogIn, Menu, X, Scroll, Search, ChevronDown } from 'lucide-react';
 import LoreModal from '../components/LoreModal';
-import { fetchJSON } from '../utils/api';
+import { fetchJSON, API_BASE_URL } from '../utils/api';
 
 interface Book {
   id: string;
@@ -50,7 +50,7 @@ export default function Landing() {
     const userId = localStorage.getItem('userId');
     if (!token || !userId) { navigate('/login'); return; }
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/collections`, {
+      const res = await fetch(`${API_BASE_URL}/api/collections`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ userId, bookId })

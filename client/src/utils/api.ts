@@ -1,5 +1,6 @@
 // In production (Vercel), empty string = same origin. In local dev, set VITE_API_URL.
-const BASE_URL = import.meta.env.VITE_API_URL || '';
+// IMPORTANT: Do NOT hardcode http://localhost:5000 — use this constant instead.
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 /**
  * Fetch wrapper with timeout to prevent hanging when backend is cold-starting (e.g. Render free tier).
@@ -14,7 +15,7 @@ export async function fetchWithTimeout(
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(`${API_BASE_URL}${path}`, {
       ...fetchOptions,
       signal: controller.signal,
     });

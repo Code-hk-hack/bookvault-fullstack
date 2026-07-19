@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Crown, ArrowLeft, Shield, BookOpen, Palette } from 'lucide-react';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Upgrade() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function Upgrade() {
     const userId = localStorage.getItem('userId');
     if (!token || !userId) { navigate('/login'); return; }
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/payments/create-checkout-session`, {
+      const res = await fetch(`${API_BASE_URL}/api/payments/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ userId })

@@ -28,7 +28,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const payload = ticket.getPayload();
       if (payload) {
         email = payload.email;
-        name = payload.name;
       }
     } catch {
       // Mock flow: if verification fails with dummy client ID, extract from mock token

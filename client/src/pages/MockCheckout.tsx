@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CreditCard, Lock, ArrowLeft, CheckCircle } from 'lucide-react';
+import { API_BASE_URL } from '../utils/api';
 
 export default function MockCheckout() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function MockCheckout() {
     setLoading(true);
     await new Promise(r => setTimeout(r, 1500));
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/payments/success`, {
+      const res = await fetch(`${API_BASE_URL}/api/payments/success`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })

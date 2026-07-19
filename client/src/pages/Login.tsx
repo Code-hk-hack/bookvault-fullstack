@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,7 +23,7 @@ export default function Login() {
     setLoading(true);
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -44,7 +45,7 @@ export default function Login() {
     setLoading(true);
     try {
       const mockName = `scholar_${Math.floor(Math.random() * 1000)}`;
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/google`, {
+      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: `mock_token_${mockName}` })
